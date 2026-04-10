@@ -16,7 +16,7 @@ export function PriceMarketAgent() {
   const cropName = (agent1Data?.cropName || "WHEAT").toUpperCase();
   const district = (agent2Data?.location || "SONIPAT").toUpperCase(); 
   
-  // ✅ Quantity handling: Use context value if available, else fallback to calculation
+  // Quantity handling
   const yieldQuintals = agent1Data?.predictedYield 
     ? parseFloat(agent1Data.predictedYield) 
     : (parseFloat(agent1Data?.predictedYield || "1.05") * (parseFloat(agent1Data?.quantity || "1000") / 1000)) * 10;
@@ -24,16 +24,12 @@ export function PriceMarketAgent() {
   const [loading, setLoading] = useState(true);
   const [marketData, setMarketData] = useState<any>(null);
 
-  // THIS IS THE ONLY PART THAT WAS CHANGED
   const handleProceed = () => {
-    // 1. Convert Quintals to Tons
     const yieldInTons = yieldQuintals / 10;
-    
-    // 2. Navigate and pass the state to the Transport Agent
     navigate("/agent-transport", {
       state: {
         quantity: yieldInTons,
-        distance: 150 // Defaulting to 150km as established
+        distance: 150 
       }
     });
   };
@@ -130,6 +126,7 @@ export function PriceMarketAgent() {
               <Card className="border-none shadow-xl rounded-3xl overflow-hidden bg-white">
                 <div className="h-2 bg-emerald-500" />
                 <CardContent className="p-8 space-y-6">
+                  
                   <div className="flex justify-between items-start">
                     <div>
                       <h1 className="text-5xl font-black text-slate-900 mb-2">{marketData?.price}</h1>
@@ -137,7 +134,6 @@ export function PriceMarketAgent() {
                         {marketData?.market} • {marketData?.variety}
                       </p>
                     </div>
-                    
                   </div>
 
                   <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between items-center">
@@ -153,11 +149,10 @@ export function PriceMarketAgent() {
                     </div>
                   </div>
 
-                  {/* Estimation Disclaimer Note */}
                   <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl flex gap-3 items-start">
                     <AlertCircle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
                     <p className="text-[11px] text-blue-800 font-medium leading-relaxed">
-                      Note: This revenue estimation is based on real-time Mandi averages. Final earnings may differ based on crop quality (grade), moisture content, and precise Mandi arrival timings.
+                      Note: Final earnings may differ based on crop quality (grade), moisture content, and precise Mandi arrival timings.
                     </p>
                   </div>
 
@@ -174,7 +169,6 @@ export function PriceMarketAgent() {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="bg-[#263238] text-white pt-16 pb-8 mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
@@ -192,6 +186,7 @@ export function PriceMarketAgent() {
                 <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#2E7D32] transition-colors"><Mail className="w-5 h-5" /></button>
               </div>
             </div>
+
             <div>
               <h4 className="font-bold text-lg mb-6">Quick Links</h4>
               <ul className="space-y-4 text-gray-400 text-sm">
@@ -199,6 +194,7 @@ export function PriceMarketAgent() {
                 <li className="hover:text-[#81C784] cursor-pointer" onClick={() => navigate("/workflow")}>Workflow</li>
               </ul>
             </div>
+
             <div>
               <h4 className="font-bold text-lg mb-6">Market Intel</h4>
               <ul className="space-y-4 text-gray-400 text-sm">
@@ -208,6 +204,7 @@ export function PriceMarketAgent() {
               </ul>
             </div>
           </div>
+
           <div className="border-t border-white/10 pt-8 text-center text-sm text-gray-500">
             <p>© 2026 GreenHarvest AI. All rights reserved.</p>
           </div>
