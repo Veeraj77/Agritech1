@@ -137,9 +137,7 @@ export function PriceMarketAgent() {
                         {marketData?.market} • {marketData?.variety}
                       </p>
                     </div>
-                    <div className="bg-slate-900 text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                      Live Trend: {marketData?.trend}
-                    </div>
+                    
                   </div>
 
                   <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between items-center">
