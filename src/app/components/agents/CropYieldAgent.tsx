@@ -25,6 +25,12 @@ export function CropYieldAgent() {
   const [isCalculating, setIsCalculating] = useState(false);
   const [showResults, setShowResults] = useState(!!agent1Data.predictedYield);
 
+  // ✅ REQUIRED ADDITION — season to crop mapping
+  const seasonCrops = {
+    Rabi: ["Wheat"],
+    Kharif: ["Rice"],
+  };
+
   const handlePredict = async () => {
     if (!cropSeason || !cropName || !areaAcre) {
       alert("Please fill in all fields");
@@ -116,7 +122,13 @@ export function CropYieldAgent() {
             <CardContent className="space-y-4">
               <div>
                 <Label>Crop Season</Label>
-                <Select value={cropSeason} onValueChange={setCropSeason}>
+                <Select 
+                  value={cropSeason} 
+                  onValueChange={(value) => {
+                    setCropSeason(value);
+                    setCropName(""); // reset crop when season changes
+                  }}
+                >
                   <SelectTrigger><SelectValue placeholder="Select season" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Rabi">Rabi</SelectItem>
@@ -124,16 +136,31 @@ export function CropYieldAgent() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* ✅ UPDATED CROP DROPDOWN HERE */}
               <div>
                 <Label>Crop Name</Label>
-                <Select value={cropName} onValueChange={setCropName}>
-                  <SelectTrigger><SelectValue placeholder="Select crop" /></SelectTrigger>
+                <Select 
+                  value={cropName} 
+                  onValueChange={setCropName}
+                  disabled={!cropSeason}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select crop" />
+                  </SelectTrigger>
+
                   <SelectContent>
-                    <SelectItem value="Rice">Rice</SelectItem>
-                    <SelectItem value="Wheat">Wheat</SelectItem>
+                    {cropSeason &&
+                      seasonCrops[cropSeason].map((crop) => (
+                        <SelectItem key={crop} value={crop}>
+                          {crop}
+                        </SelectItem>
+                      ))
+                    }
                   </SelectContent>
                 </Select>
               </div>
+
               <div>
                 <Label>Area (Acres)</Label>
                 <Input
@@ -143,7 +170,11 @@ export function CropYieldAgent() {
                   placeholder="e.g. 23"
                 />
               </div>
-              <Button onClick={handlePredict} disabled={isCalculating} className="w-full bg-[#1B5E20] hover:bg-[#2E7D32]">
+              <Button 
+                onClick={handlePredict} 
+                disabled={isCalculating} 
+                className="w-full bg-[#1B5E20] hover:bg-[#2E7D32]"
+              >
                 {isCalculating ? "Calculating..." : "Calculate Yield"}
               </Button>
             </CardContent>
@@ -182,7 +213,10 @@ export function CropYieldAgent() {
                     </p>
                   </div>
 
-                  <Button onClick={() => navigate("/agent-storage")} className="w-full h-12 text-lg font-semibold bg-[#1B5E20] hover:bg-[#2E7D32]">
+                  <Button 
+                    onClick={() => navigate("/agent-storage")} 
+                    className="w-full h-12 text-lg font-semibold bg-[#1B5E20] hover:bg-[#2E7D32]"
+                  >
                     Next <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </div>
